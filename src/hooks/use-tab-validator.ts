@@ -14,8 +14,10 @@ export const useTabValidator = () => {
 			return;
 		}
 
-		const tabUrl = new URL(url);
-		if (tabUrl.hostname !== YtConstants.HostName || tabUrl.pathname !== YtConstants.PathName) {
+		const { origin, pathname } = new URL(url);
+		const hostNameMatch = origin === YtConstants.YtOrigin || origin === YtConstants.YtMusicOrigin;
+		const pathNameMatch = pathname === YtConstants.PathName;
+		if (!hostNameMatch || !pathNameMatch) {
 			setIsYoutube(false);
 			return;
 		}
