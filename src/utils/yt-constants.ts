@@ -7,6 +7,7 @@ export namespace YtConstants {
 	export const WebRequestTypes: chrome.webRequest.ResourceType[] = ["xmlhttprequest"];
 
 	export enum InteractionRequestLabels {
-		SkipShown = "video_skip_shown"
+		SkipShown = "video_skip_shown",
+		VideoSkipped = "videoskipped"
 	}
 }

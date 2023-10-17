@@ -8,11 +8,15 @@ export const YoutubeView = React.memo(() => {
 
 		const { searchParams } = new URL(url);
 		const label = searchParams.get("label");
-		if (label !== YtConstants.InteractionRequestLabels.SkipShown) {
-			return;
-		}
 
-		handleAdSkip(frameId, tabId);
+		switch (label) {
+			case YtConstants.InteractionRequestLabels.SkipShown:
+			case YtConstants.InteractionRequestLabels.VideoSkipped:
+				handleAdSkip(frameId, tabId, label);
+				break;
+			default:
+				break;
+		}
 	};
 
 	React.useEffect(() => {
