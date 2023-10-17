@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useTabValidator } from "../hooks/use-tab-validator";
+import { OtherView } from "../views/other/other-view";
 
 interface Props {
 	children?: React.ReactNode;
@@ -7,5 +8,5 @@ interface Props {
 
 export const ContentWrapper = React.memo<Props>(props => {
 	const isYoutube = useTabValidator();
-	return isYoutube ? props.children : null;
+	return isYoutube ? props.children : <OtherView />;
 });

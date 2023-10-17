@@ -3,15 +3,16 @@ import { YtConstants } from "../../utils/yt-constants";
 import { handleAdSkip } from "../../utils/yt-helpers";
 
 export const YoutubeView = React.memo(() => {
-	const handleCompleted = (details: chrome.webRequest.WebResponseCacheDetails) => {
+	const handleCompleted = (details: chrome.webRequest.WebResponseHeadersDetails) => {
 		const { url, frameId, tabId } = details;
+		console.log("handleCompleted => details:", details);
 
 		const { searchParams } = new URL(url);
 		const label = searchParams.get("label");
+		console.log("handleCompleted => label:", label);
 
 		switch (label) {
 			case YtConstants.InteractionRequestLabels.SkipShown:
-			case YtConstants.InteractionRequestLabels.VideoSkipped:
 				handleAdSkip(frameId, tabId, label);
 				break;
 			default:
@@ -23,7 +24,7 @@ export const YoutubeView = React.memo(() => {
 		chrome.tabs.query({ active: true, currentWindow: true }).then(tabs => {
 			const tab = tabs[tabs.length - 1];
 
-			chrome.webRequest.onCompleted.addListener(handleCompleted, {
+			chrome.webRequest.onHeadersReceived.addListener(handleCompleted, {
 				urls: YtConstants.WebRequestUrls,
 				tabId: tab.id,
 				windowId: tab.windowId,
