@@ -1,4 +1,9 @@
 import * as React from "react";
-import { Content } from "./content/content";
+import { ContentWrapper } from "./content/content-wrapper";
+import { YoutubeView } from "./views/youtube/youtube-view";
 
-export const App = React.memo(() => <Content />);
+export const App = React.memo(() => (
+	<ContentWrapper>
+		<YoutubeView />
+	</ContentWrapper>
+));
