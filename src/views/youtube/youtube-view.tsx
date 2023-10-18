@@ -1,9 +1,9 @@
 import * as React from "react";
-// import { YtConstants } from "../../utils/yt-constants";
+import { YtConstants } from "../../utils/yt-constants";
 // import { handleAdSkip } from "../../utils/yt-helpers";
 
 export const YoutubeView = React.memo(() => {
-	const handleCompleted = (details: chrome.webRequest.WebResponseCacheDetails) => {
+	const handleCompleted = (details: chrome.webRequest.WebRequestBodyDetails) => {
 		console.log("handleCompleted - details:", details);
 		// const { url, frameId, tabId } = details;
 		// console.log("handleCompleted => details:", details);
@@ -21,20 +21,20 @@ export const YoutubeView = React.memo(() => {
 		// }
 	};
 
+	// chrome.webRequest.onResponseStarted
+
 	React.useEffect(() => {
 		chrome.tabs.query({ active: true, currentWindow: true }).then(tabs => {
 			const tab = tabs[tabs.length - 1];
-			console.log("chrome.tabs.query - tab :", tab);
 
-			chrome.webRequest.onResponseStarted.addListener(handleCompleted, {
-				urls: ["<all_urls>"]
-				// urls: YtConstants.WebRequestUrls,
-				// tabId: tab.id,
-				// windowId: tab.windowId,
-				// types: YtConstants.WebRequestTypes
+			chrome.webRequest.onBeforeRequest.addListener(handleCompleted, {
+				urls: YtConstants.WebRequestUrls,
+				tabId: tab.id,
+				windowId: tab.windowId,
+				types: YtConstants.WebRequestTypes
 			});
 
-			return () => chrome.webRequest.onCompleted.removeListener(handleCompleted);
+			return () => chrome.webRequest.onBeforeRequest.removeListener(handleCompleted);
 		});
 	}, []);
 
