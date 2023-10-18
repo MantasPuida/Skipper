@@ -1,39 +1,34 @@
 import * as React from "react";
 import "./other-view-styles.scss";
 
-export const OtherView = React.memo(() => (
-	<div style={{ width: "500px", height: "500px" }}>
-		<div className="box">
-			<div className="box__ghost">
-				<div className="symbol" />
-				<div className="symbol" />
-				<div className="symbol" />
-				<div className="symbol" />
-				<div className="symbol" />
-				<div className="symbol" />
+export const OtherView = React.memo(() => {
+	const handleMovable = () => {
+		const constrain = 50;
+		const mouseOverContainer = document.getElementById("containerMovableId");
+		const ex1Layer = document.getElementById("boxMovableId");
 
-				<div className="box__ghost-container">
-					<div className="box__ghost-eyes">
-						<div className="box__eye-left" />
-						<div className="box__eye-right" />
-					</div>
-					<div className="box__ghost-bottom">
-						<div />
-						<div />
-						<div />
-						<div />
-						<div />
-					</div>
-				</div>
-				<div className="box__ghost-shadow" />
-			</div>
+		if (!mouseOverContainer || !ex1Layer) {
+			return;
+		}
 
-			<div className="box__description">
-				<div className="box__description-container">
-					<div className="box__description-title">Whoops!</div>
-					<div className="box__description-text">It seems You are not on youtube</div>
-				</div>
-			</div>
+		mouseOverContainer.onmousemove = event => {
+			window.requestAnimationFrame(() => {
+				const box = ex1Layer.getBoundingClientRect();
+				const calcX = -(event.clientY - box.y - box.height / 2) / constrain;
+				const calcY = (event.clientX - box.x - box.width / 2) / constrain;
+
+				ex1Layer.style.transform = `perspective(100px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
+			});
+		};
+	};
+
+	React.useEffect(() => {
+		handleMovable();
+	}, []);
+
+	return (
+		<div id="containerMovableId" className="containerMovable">
+			<div id="boxMovableId" className="boxMovable" />
 		</div>
-	</div>
-));
+	);
+});
