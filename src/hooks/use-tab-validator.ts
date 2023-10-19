@@ -6,7 +6,7 @@ type HandleUpdated = (tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab:
 export const useTabValidator = () => {
 	const [isYoutube, setIsYoutube] = React.useState(false);
 
-	const handleUpdated: HandleUpdated = (_tabId, _changeInfo, tab) => {
+	const handleUpdated: HandleUpdated = async (_tabId, _changeInfo, tab) => {
 		const { url } = tab;
 
 		if (!url) {
@@ -16,7 +16,7 @@ export const useTabValidator = () => {
 
 		const { origin, pathname } = new URL(url);
 		const hostNameMatch = origin === YtConstants.YtOrigin || origin === YtConstants.YtMusicOrigin;
-		const pathNameMatch = pathname === YtConstants.PathName;
+		const pathNameMatch = pathname === YtConstants.YtPathname;
 		if (!hostNameMatch || !pathNameMatch) {
 			setIsYoutube(false);
 			return;

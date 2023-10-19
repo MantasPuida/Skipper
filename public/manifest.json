@@ -6,7 +6,8 @@
 		"default_title": "Configure Skipper",
 		"default_popup": "index.html"
 	},
-	"permissions": ["tabs"],
+	"permissions": ["tabs", "webRequest", "scripting"],
+	"host_permissions": ["https://www.youtube.com/*", "https://music.youtube.com/*"],
 	"icons": {
 		"16": "icon16.png",
 		"48": "icon48.png",
