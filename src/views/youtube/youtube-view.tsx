@@ -1,27 +1,22 @@
 import * as React from "react";
 import { YtConstants } from "../../utils/yt-constants";
-// import { handleAdSkip } from "../../utils/yt-helpers";
+import { handleAdSkip } from "../../utils/yt-helpers";
 
 export const YoutubeView = React.memo(() => {
 	const handleCompleted = (details: chrome.webRequest.WebRequestBodyDetails) => {
-		console.log("handleCompleted - details:", details);
-		// const { url, frameId, tabId } = details;
-		// console.log("handleCompleted => details:", details);
+		const { url, frameId, tabId } = details;
 
-		// const { searchParams } = new URL(url);
-		// const label = searchParams.get("label");
-		// console.log("handleCompleted => label:", label);
+		const { searchParams } = new URL(url);
+		const label = searchParams.get("label");
 
-		// switch (label) {
-		// 	case YtConstants.InteractionRequestLabels.SkipShown:
-		// 		handleAdSkip(frameId, tabId, label);
-		// 		break;
-		// 	default:
-		// 		break;
-		// }
+		switch (label) {
+			case YtConstants.InteractionRequestLabels.SkipShown:
+				handleAdSkip(frameId, tabId);
+				break;
+			default:
+				break;
+		}
 	};
-
-	// chrome.webRequest.onResponseStarted
 
 	React.useEffect(() => {
 		chrome.tabs.query({ active: true, currentWindow: true }).then(tabs => {
