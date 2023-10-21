@@ -3,14 +3,19 @@
 	"name": "Skipper",
 	"version": "1.0.0",
 	"action": {
-		"default_title": "Configure Skipper",
+		"default_title": "Open Skipper",
 		"default_popup": "index.html"
 	},
-	"permissions": ["tabs", "webRequest", "scripting"],
+	"background": {
+		"service_worker": "service-worker.js",
+		"type": "module"
+	},
+	"permissions": ["tabs", "webRequest", "scripting", "storage"],
 	"host_permissions": ["https://www.youtube.com/*", "https://music.youtube.com/*"],
 	"icons": {
-		"16": "icon16.png",
-		"48": "icon48.png",
-		"128": "icon128.png"
+		"16": "skipper.png",
+		"32": "skipper.png",
+		"48": "skipper.png",
+		"128": "skipper.png"
 	}
 }
