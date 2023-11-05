@@ -1,4 +1,4 @@
-const handleInjection = (frameId, tabId, parentSelector, classNames) => {
+const handleInjection = (frameId, tabId, classNames, parentSelector) => {
 	const handleScriptInjection = (...args) => {
 		const [parentSelectorArg, classNamesArg] = args;
 		const parentSelectorNode = document.getElementById(parentSelectorArg);
@@ -28,44 +28,46 @@ const handleInjection = (frameId, tabId, parentSelector, classNames) => {
 const handleAdSkip = (...args) => {
 	const selectorClassNames = ["ytp-ad-skip-button ytp-button", "ytp-ad-skip-button-modern ytp-button"];
 	const parentSelector = "ytd-player";
-
-	handleInjection(...args, parentSelector, selectorClassNames);
+	handleInjection(...args, selectorClassNames, parentSelector);
 };
 
-const handleAdMute = (...args) => {
-	const selectorClassNames = ["ytp-mute-button ytp-button"];
-	const parentSelector = "ytp-chrome-controls";
+// const handleAdMute = (...args) => {
+// 	const selectorClassNames = ["ytp-mute-button ytp-button"];
+// 	const parentSelector = "ytp-chrome-controls";
 
-	handleInjection(...args, parentSelector, selectorClassNames);
-};
+// 	handleInjection(...args, parentSelector, selectorClassNames);
+// };
 
 const handleCompleted = details => {
 	const { url, frameId, tabId } = details;
-
 	const { searchParams } = new URL(url);
+
 	const label = searchParams.get("label");
+
+	// video has ended
+	// case "videoplaytime100":
+	// case "videoskipped":
 
 	switch (label) {
 		case "video_skip_shown":
 			handleAdSkip(frameId, tabId);
-			break;
-		case "video_companion_impression_tracking":
-		case "videoskipped":
-			handleAdMute(frameId, tabId);
 			break;
 		default:
 			break;
 	}
 };
 
-const listenToRequests = tab => {
-	const WebRequestUrls = ["https://www.youtube.com/pagead/interaction/*"];
-	const WebRequestTypes = ["xmlhttprequest"];
+// ad start url
+// "https://www.youtube.com/api/stats/ads*"
 
+const listenToRequests = () => {
 	const hasListener = chrome.webRequest.onBeforeRequest.hasListener(handleCompleted);
 	if (hasListener) {
-		return;
+		chrome.webRequest.onBeforeRequest.removeListener(handleCompleted);
 	}
+
+	const WebRequestUrls = ["https://www.youtube.com/pagead/interaction/*"];
+	const WebRequestTypes = ["xmlhttprequest"];
 
 	chrome.webRequest.onBeforeRequest.addListener(handleCompleted, {
 		urls: WebRequestUrls,
@@ -77,6 +79,7 @@ const listenToRequests = tab => {
 
 const handleOnUpdated = (_tabId, _changeInfo, tab) => {
 	const { url } = tab;
+
 	if (!url) {
 		return;
 	}
@@ -89,11 +92,6 @@ const handleOnUpdated = (_tabId, _changeInfo, tab) => {
 	const hostNameMatch = origin === YtOrigin || origin === YtMusicOrigin;
 	const pathNameMatch = pathname === YtPathname;
 	if (!hostNameMatch || !pathNameMatch) {
-		const hasListener = chrome.webRequest.onBeforeRequest.hasListener(handleCompleted);
-		if (hasListener) {
-			chrome.webRequest.onBeforeRequest.removeListener(handleCompleted);
-		}
-
 		return;
 	}
 
@@ -103,7 +101,7 @@ const handleOnUpdated = (_tabId, _changeInfo, tab) => {
 const listenToTabs = () => {
 	const hasListener = chrome.tabs.onUpdated.hasListener(handleOnUpdated);
 	if (hasListener) {
-		return;
+		chrome.tabs.onUpdated.removeListener(handleOnUpdated);
 	}
 
 	chrome.tabs.onUpdated.addListener(handleOnUpdated);

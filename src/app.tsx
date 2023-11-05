@@ -1,9 +1,11 @@
 import * as React from "react";
-import { ContentWrapper } from "./content/content-wrapper";
-import { YoutubeView } from "./views/youtube/youtube-view";
+import { LayoutWrapper } from "./layout/layout-wrapper";
+import { Header } from "./components/header/header-component";
+import { Content } from "./components/content/content-component";
 
 export const App = React.memo(() => (
-	<ContentWrapper>
-		<YoutubeView />
-	</ContentWrapper>
+	<LayoutWrapper>
+		<Header />
+		<Content />
+	</LayoutWrapper>
 ));
