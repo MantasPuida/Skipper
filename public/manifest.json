@@ -10,24 +10,7 @@
 		"service_worker": "service-worker.js",
 		"type": "module"
 	},
-	"permissions": [
-		"tabs",
-		"webRequest",
-		"declarativeNetRequest",
-		"declarativeNetRequestWithHostAccess",
-		"declarativeNetRequestFeedback",
-		"scripting",
-		"storage"
-	],
-	"declarative_net_request": {
-		"rule_resources": [
-			{
-				"id": "ruleset_1",
-				"enabled": true,
-				"path": "./rules_1.json"
-			}
-		]
-	},
+	"permissions": ["tabs", "webRequest", "scripting", "storage"],
 	"host_permissions": ["https://www.youtube.com/*", "https://music.youtube.com/*"],
 	"icons": {
 		"16": "skipper.png",

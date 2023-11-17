@@ -1,7 +1,12 @@
-import { Constants } from "./constants";
+import { Constants } from "./components-constants";
+
+interface ToggleOptions {
+	isDarkMode: boolean;
+	setLocalStorage?: boolean;
+}
 
 export namespace Helpers {
-	export const AddDarkClass = (setLocalStorage?: boolean) => {
+	const addDarkClass = (setLocalStorage?: boolean) => {
 		document.documentElement.classList.add(Constants.DarkClass);
 
 		if (setLocalStorage) {
@@ -9,20 +14,22 @@ export namespace Helpers {
 		}
 	};
 
-	export const RemoveDarkClass = (setLocalStorage?: boolean) => {
+	const removeDarkClass = (setLocalStorage?: boolean) => {
 		document.documentElement.classList.remove(Constants.DarkClass);
 
 		if (setLocalStorage) {
-			chrome.storage.local.set({ isDarkMode: false });
+			chrome.storage.local.remove(Constants.LocalStorageKeys.DarkMode);
 		}
 	};
 
-	export const HandleDarkClass = (isDarkMode: boolean, setLocalStorage?: boolean) => {
+	export const HandleDarkClass = (options: ToggleOptions) => {
+		const { isDarkMode, setLocalStorage } = options;
+
 		if (isDarkMode) {
-			AddDarkClass(setLocalStorage);
+			addDarkClass(setLocalStorage);
 			return;
 		}
 
-		RemoveDarkClass(setLocalStorage);
+		removeDarkClass(setLocalStorage);
 	};
 }

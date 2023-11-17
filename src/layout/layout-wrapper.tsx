@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Constants } from "../utils/constants";
+import { Constants } from "../utils/components-constants";
 import { Helpers } from "../utils/helpers";
 
 interface Props {
@@ -9,7 +9,9 @@ interface Props {
 export const LayoutWrapper = React.memo<Props>(props => {
 	React.useEffect(() => {
 		chrome.storage.local.get("isDarkMode").then(pair => {
-			Helpers.HandleDarkClass(pair[Constants.LocalStorageKeys.DarkMode]);
+			Helpers.HandleDarkClass({
+				isDarkMode: pair[Constants.LocalStorageKeys.DarkMode]
+			});
 		});
 	}, []);
 
